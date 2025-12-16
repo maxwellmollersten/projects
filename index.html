@@ -1,20 +1,378 @@
 <!DOCTYPE html>
 <html lang="sv">
 <head>
-  <meta charset="UTF-8">
-  <title>Flappy Diode</title>
-</head>
-<body>
-  <h1>Flappy Diode</h1>
-  <p>Ett fysiskt elektronikspel inspirerat av <i>Flappy Bird</i>.</p>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>Maxwells Projekt</title>
+  <meta name="description" content="Portfolio med elektronik- och kodprojekt." />
+  <style>
+    :root{
+      --bg:#070a12;
+      --panel:#0c1222;
+      --panel2:#0f1934;
+      --text:#eaf0ff;
+      --muted:#b7c1df;
+      --line:rgba(255,255,255,.12);
+      --shadow: 0 14px 40px rgba(0,0,0,.45);
+      --radius:18px;
+      --max: 1080px;
 
-  <h2>Funktioner</h2>
-  <ul>
-    <li>DC-motor styrd via DRV8833</li>
-    <li>LED-matris via PCA9685</li>
-    <li>Joystick</li>
-    <li>Positions- och kollisionssensorer</li>
-  </ul>
+      --a:#7aa2ff;
+      --b:#6ef3c5;
+      --c:#ffb86b;
+      --d:#ff6bd6;
+    }
+    *{box-sizing:border-box}
+    html,body{height:100%}
+    body{
+      margin:0;
+      font-family: ui-sans-serif, system-ui, -apple-system, Segoe UI, Roboto, Helvetica, Arial;
+      color:var(--text);
+      background:
+        radial-gradient(900px 500px at 10% 0%, rgba(122,162,255,.20), transparent 60%),
+        radial-gradient(900px 600px at 90% 5%, rgba(110,243,197,.16), transparent 60%),
+        radial-gradient(900px 600px at 80% 90%, rgba(255,107,214,.10), transparent 60%),
+        linear-gradient(180deg, #050714 0%, var(--bg) 55%, #05060d 100%);
+    }
+    a{color:inherit}
+    .wrap{max-width:var(--max); margin:0 auto; padding:26px 18px 70px}
+    header{
+      position:sticky; top:0; z-index:20;
+      backdrop-filter: blur(12px);
+      background: rgba(5,7,20,.55);
+      border-bottom:1px solid var(--line);
+    }
+    .topbar{
+      max-width:var(--max);
+      margin:0 auto;
+      padding:12px 18px;
+      display:flex; align-items:center; justify-content:space-between; gap:12px;
+    }
+    .brand{
+      display:flex; align-items:center; gap:10px;
+      text-decoration:none;
+      font-weight:800;
+      letter-spacing:.2px;
+    }
+    .logo{
+      width:14px; height:14px; border-radius:999px;
+      background: linear-gradient(135deg, var(--a), var(--b));
+      box-shadow: 0 0 0 6px rgba(122,162,255,.10);
+    }
+    nav{display:flex; align-items:center; gap:10px; flex-wrap:wrap}
+    .pill{
+      text-decoration:none;
+      color:var(--muted);
+      padding:8px 10px;
+      border-radius:999px;
+      border:1px solid transparent;
+    }
+    .pill:hover{color:var(--text); border-color:var(--line); background:rgba(255,255,255,.04)}
+    .hero{
+      margin-top:18px;
+      display:grid;
+      grid-template-columns: 1.3fr .7fr;
+      gap:14px;
+      align-items:stretch;
+    }
+    @media (max-width: 900px){ .hero{grid-template-columns:1fr} }
+    .card{
+      border-radius: var(--radius);
+      border:1px solid var(--line);
+      background: rgba(12,18,34,.72);
+      box-shadow: var(--shadow);
+      overflow:hidden;
+    }
+    .pad{padding:22px}
+    h1{margin:0 0 10px; font-size: clamp(28px, 3.8vw, 44px); line-height:1.12}
+    p{margin:0 0 12px; color:var(--muted); line-height:1.65}
+    .sub{
+      display:flex; gap:10px; flex-wrap:wrap;
+      margin-top:14px;
+    }
+    .chip{
+      font-size:12px;
+      padding:7px 10px;
+      border-radius:999px;
+      border:1px solid var(--line);
+      background: rgba(255,255,255,.04);
+      color: rgba(234,240,255,.92);
+    }
+    .cta{display:flex; gap:10px; flex-wrap:wrap; margin-top:14px}
+    .btn{
+      display:inline-flex; align-items:center; justify-content:center;
+      gap:8px;
+      padding:10px 12px;
+      border-radius:12px;
+      border:1px solid var(--line);
+      background: rgba(255,255,255,.04);
+      text-decoration:none;
+      font-weight:700;
+    }
+    .btn.primary{
+      border-color: rgba(122,162,255,.35);
+      background: linear-gradient(135deg, rgba(122,162,255,.20), rgba(110,243,197,.12));
+    }
+    .btn:hover{transform: translateY(-1px)}
+    .btn:active{transform: translateY(0)}
+    .side{
+      display:flex; flex-direction:column; gap:12px;
+    }
+    .search{
+      display:flex; gap:10px; align-items:center; flex-wrap:wrap;
+      margin-top:12px;
+    }
+    input[type="search"]{
+      width:100%;
+      padding:12px 12px;
+      border-radius:12px;
+      border:1px solid var(--line);
+      background: rgba(255,255,255,.03);
+      color: var(--text);
+      outline:none;
+    }
+    input[type="search"]::placeholder{color: rgba(183,193,223,.75)}
+    .mini{
+      display:grid; grid-template-columns:1fr 1fr; gap:10px;
+    }
+    .stat{
+      padding:14px;
+      border-radius:14px;
+      border:1px solid var(--line);
+      background: rgba(255,255,255,.03);
+    }
+    .stat b{display:block; font-size:18px}
+    .stat span{color:var(--muted); font-size:12px}
+
+    .section{margin-top:14px}
+    .section h2{margin:0 0 10px; font-size:22px}
+    .grid{
+      display:grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap:12px;
+    }
+    @media (max-width: 980px){ .grid{grid-template-columns:1fr 1fr} }
+    @media (max-width: 680px){ .grid{grid-template-columns:1fr} }
+
+    .proj{
+      position:relative;
+      padding:16px;
+      border-radius:16px;
+      border:1px solid var(--line);
+      background: linear-gradient(180deg, rgba(255,255,255,.04), rgba(255,255,255,.02));
+      transition: transform .12s ease;
+      min-height: 170px;
+      display:flex; flex-direction:column; gap:10px;
+    }
+    .proj:hover{transform: translateY(-2px)}
+    .proj h3{margin:0; font-size:18px}
+    .meta{
+      display:flex; gap:8px; flex-wrap:wrap;
+      margin-top:auto;
+    }
+    .badge{
+      font-size:11px;
+      padding:6px 9px;
+      border-radius:999px;
+      border:1px solid var(--line);
+      background: rgba(255,255,255,.03);
+      color: rgba(234,240,255,.90);
+    }
+    .links{display:flex; gap:10px; flex-wrap:wrap}
+    .link{
+      font-weight:700;
+      text-decoration:none;
+      color: rgba(234,240,255,.92);
+      padding:8px 10px;
+      border-radius:12px;
+      border:1px solid var(--line);
+      background: rgba(255,255,255,.03);
+    }
+    .link:hover{border-color: rgba(122,162,255,.35)}
+    .muted{color:var(--muted)}
+
+    .note{
+      border-radius:16px;
+      border:1px solid var(--line);
+      background: rgba(255,255,255,.03);
+      padding:14px;
+      color:var(--muted);
+      line-height:1.6;
+    }
+
+    footer{
+      margin-top:22px;
+      padding-top:18px;
+      border-top:1px solid var(--line);
+      color:var(--muted);
+      font-size:13px;
+      display:flex; justify-content:space-between; gap:10px; flex-wrap:wrap;
+    }
+    code{
+      font-family: ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, "Liberation Mono", "Courier New", monospace;
+      font-size: 0.95em;
+      background: rgba(255,255,255,.06);
+      border:1px solid rgba(255,255,255,.10);
+      padding: 2px 6px;
+      border-radius: 8px;
+      color: rgba(234,240,255,.92);
+    }
+    .hidden{display:none !important}
+  </style>
+</head>
+
+<body>
+  <header>
+    <div class="topbar">
+      <a class="brand" href="#top">
+        <span class="logo" aria-hidden="true"></span>
+        <span>Maxwells Projekt</span>
+      </a>
+      <nav aria-label="Navigering">
+        <a class="pill" href="#projects">Projekt</a>
+        <a class="pill" href="#about">Om</a>
+        <!-- ÄNDRA denna till din profil-länk -->
+        <a class="pill" href="https://github.com/maxwellmollerstten" target="_blank" rel="noreferrer">GitHub</a>
+      </nav>
+    </div>
+  </header>
+
+  <main id="top" class="wrap">
+    <div class="hero">
+      <section class="card pad">
+        <h1>Portfolio</h1>
+        <p>En enkel, snygg projektsida som fungerar på GitHub Pages. Lägg till alla dina repos som “kort” nedan. Du kan söka/filtrera direkt på sidan.</p>
+
+        <div class="sub">
+          <span class="chip">Elektronik</span>
+          <span class="chip">Arduino</span>
+          <span class="chip">FPGA</span>
+          <span class="chip">Python</span>
+          <span class="chip">3D-print</span>
+        </div>
+
+        <div class="cta">
+          <a class="btn primary" href="#projects">Se projekt</a>
+          <!-- ÄNDRA om du vill peka på ett “huvudrepo” -->
+          <a class="btn" href="https://github.com/maxwellmollerstten?tab=repositories" target="_blank" rel="noreferrer">Alla repos</a>
+        </div>
+
+        <div class="search" aria-label="Sök">
+          <input id="q" type="search" placeholder="Sök projekt (t.ex. Arduino, motor, PCA9685, FPGA)..." />
+        </div>
+      </section>
+
+      <aside class="side">
+        <div class="card pad">
+          <div class="mini">
+            <div class="stat">
+              <b id="count">0</b>
+              <span>Projekt på sidan</span>
+            </div>
+            <div class="stat">
+              <b>GitHub Pages</b>
+              <span>Statisk sida</span>
+            </div>
+          </div>
+          <p style="margin-top:12px" class="muted">
+            Tips: Gör ett repo som heter <code>maxwellmollerstten.github.io</code> om du vill ha din sida på rot-URL:en.
+          </p>
+        </div>
+
+        <div class="card pad note" id="about">
+          <b style="color:var(--text)">Om sidan</b><br />
+          Redigera listan i <code>projects</code> i koden för att lägga till fler projekt (titel, beskrivning, taggar, repo-länk, demo-länk).
+        </div>
+      </aside>
+    </div>
+
+    <section class="section card pad" id="projects">
+      <h2>Projekt</h2>
+      <p class="muted">Klicka på ett projekt för repo, och (om du vill) en demo-länk. Sökfältet filtrerar på titel, text och taggar.</p>
+
+      <div class="grid" id="grid"></div>
+    </section>
+
+    <footer>
+      <div>© <span id="year"></span> Maxwell</div>
+      <div>Byggd som <code>index.html</code> för GitHub Pages</div>
+    </footer>
+  </main>
+
+  <script>
+    // ==========================
+    // 1) LÄGG IN ALLA DINA PROJEKT HÄR
+    // ==========================
+    const projects = [
+      {
+        title: "Flappy Diode",
+        desc: "Ett fysiskt elektronikspel inspirerat av Flappy Bird. Motorstyrning, sensorer och LED-drivning med poäng och game over.",
+        tags: ["Arduino", "DRV8833", "PCA9685", "LED", "Sensorer"],
+        repo: "https://github.com/maxwellmollerstten/Flappy-Diode",
+        demo: "" // t.ex. GitHub Pages demo-länk om du har en: "https://maxwellmollerstten.github.io/Flappy-Diode/"
+      },
+
+      // EXEMPEL: kopiera detta objekt och ändra
+      /*
+      {
+        title: "FPGA - Basys 3 Projekt",
+        desc: "State machine / logik på Basys 3 med Vivado.",
+        tags: ["FPGA", "Vivado", "VHDL/Verilog"],
+        repo: "https://github.com/maxwellmollerstten/fpga-project",
+        demo: ""
+      }
+      */
+    ];
+
+    // ==========================
+    // 2) RENDER
+    // ==========================
+    const grid = document.getElementById("grid");
+    const q = document.getElementById("q");
+    const count = document.getElementById("count");
+
+    function esc(s){
+      return (s || "").replace(/[&<>"']/g, m => ({ "&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;","'":"&#039;" }[m]));
+    }
+
+    function card(p){
+      const tags = (p.tags || []).map(t => `<span class="badge">${esc(t)}</span>`).join("");
+      const demo = p.demo ? `<a class="link" href="${esc(p.demo)}" target="_blank" rel="noreferrer">Demo</a>` : "";
+      return `
+        <article class="proj" data-text="${esc((p.title+" "+p.desc+" "+(p.tags||[]).join(" ")).toLowerCase())}">
+          <h3>${esc(p.title)}</h3>
+          <p class="muted">${esc(p.desc)}</p>
+          <div class="meta">${tags}</div>
+          <div class="links">
+            <a class="link" href="${esc(p.repo)}" target="_blank" rel="noreferrer">Repo</a>
+            ${demo}
+          </div>
+        </article>
+      `;
+    }
+
+    function render(){
+      grid.innerHTML = projects.map(card).join("");
+      filter();
+    }
+
+    function filter(){
+      const term = (q.value || "").trim().toLowerCase();
+      const items = [...grid.querySelectorAll(".proj")];
+      let visible = 0;
+      for(const el of items){
+        const text = el.getAttribute("data-text") || "";
+        const ok = !term || text.includes(term);
+        el.classList.toggle("hidden", !ok);
+        if(ok) visible++;
+      }
+      count.textContent = visible;
+    }
+
+    q.addEventListener("input", filter);
+    document.getElementById("year").textContent = new Date().getFullYear();
+
+    render();
+  </script>
 </body>
 </html>
-
