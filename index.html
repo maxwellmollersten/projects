@@ -231,7 +231,6 @@
       <nav aria-label="Navigering">
         <a class="pill" href="#projects">Projekt</a>
         <a class="pill" href="#about">Om</a>
-        <!-- ÄNDRA denna till din profil-länk -->
         <a class="pill" href="https://github.com/maxwellmollersten" target="_blank" rel="noreferrer">GitHub</a>
       </nav>
     </div>
@@ -253,7 +252,6 @@
 
         <div class="cta">
           <a class="btn primary" href="#projects">Se projekt</a>
-          <!-- ÄNDRA om du vill peka på ett “huvudrepo” -->
           <a class="btn" href="https://github.com/maxwellmollersten?tab=repositories" target="_blank" rel="noreferrer">Alla repos</a>
         </div>
 
@@ -274,9 +272,7 @@
               <span>Statisk sida</span>
             </div>
           </div>
-          <p style="margin-top:12px" class="muted">
-            
-          </p>
+          <p style="margin-top:12px" class="muted"></p>
         </div>
 
         <div class="card pad note" id="about">
@@ -309,19 +305,17 @@
         desc: "Ett fysiskt elektronikspel inspirerat av Flappy Bird. Motorstyrning, sensorer och LED-drivning med poängräknare och game over.",
         tags: ["Arduino", "DRV8833", "PCA9685", "LED", "Sensorer", "LED Display"],
         repo: "https://maxwellmollersten.github.io/Flappy-Diode/",
-        demo: "" // t.ex. GitHub Pages demo-länk om du har en: "https://maxwellmollersten.github.io/Flappy-Diode/"
+        demo: "" // valfritt
       },
-
-      // EXEMPEL: kopiera detta objekt och ändra
-      /*
       {
-        title: "FPGA - Basys 3 Projekt",
-        desc: "State machine / logik på Basys 3 med Vivado.",
-        tags: ["FPGA", "Vivado", "VHDL/Verilog"],
-        repo: "https://github.com/maxwellmollersten/fpga-project",
-        demo: ""
+        title: "EV Conversion",
+        desc: "Elbils-/EV-konverteringsprojekt med fokus på elmotor, sensorer, mekanisk integration och styrning.",
+        tags: ["EV", "Elmotor", "Sensorer", "Mekanik", "Elektronik"],
+        repo: "https://maxwellmollersten.github.io/ev-conversion/",
+        demo: "" // valfritt
       }
-      */
+
+      // Lägg fler projekt här genom att kopiera ett objekt ovan
     ];
 
     // ==========================
@@ -332,7 +326,9 @@
     const count = document.getElementById("count");
 
     function esc(s){
-      return (s || "").replace(/[&<>"']/g, m => ({ "&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;","'":"&#039;" }[m]));
+      return (s || "").replace(/[&<>"']/g, m => ({
+        "&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;","'":"&#039;"
+      }[m]));
     }
 
     function card(p){
