@@ -1,10 +1,11 @@
 <!DOCTYPE html>
-<html lang="sv">
+<html lang="en">
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1" />
-  <title>Maxwells Projekt</title>
-  <meta name="description" content="Portfolio med elektronik- och kodprojekt." />
+  <title>Maxwell’s Projects</title>
+  <meta name="description" content="Portfolio of electronics and software projects." />
+
   <style>
     :root{
       --bg:#070a12;
@@ -226,11 +227,11 @@
     <div class="topbar">
       <a class="brand" href="#top">
         <span class="logo" aria-hidden="true"></span>
-        <span>Maxwells Projekt</span>
+        <span>Maxwell’s Projects</span>
       </a>
-      <nav aria-label="Navigering">
-        <a class="pill" href="#projects">Projekt</a>
-        <a class="pill" href="#about">Om</a>
+      <nav aria-label="Navigation">
+        <a class="pill" href="#projects">Projects</a>
+        <a class="pill" href="#about">About</a>
         <a class="pill" href="https://github.com/maxwellmollersten" target="_blank" rel="noreferrer">GitHub</a>
       </nav>
     </div>
@@ -240,23 +241,26 @@
     <div class="hero">
       <section class="card pad">
         <h1>Portfolio</h1>
-        <p>Det här är en hemsida för att samla alla mina elektronikprojekt. Jag studerar civilingenjörs programmet i elektroteknik och gör även många projekt utanför mina studier som en hobby.</p>
+        <p>
+          This page collects my electronics and software projects. I study Electrical Engineering and also build
+          projects outside of school as a hobby—especially embedded systems, control, and hardware + firmware integration.
+        </p>
 
         <div class="sub">
-          <span class="chip">Elektronik</span>
+          <span class="chip">Electronics</span>
           <span class="chip">Arduino</span>
           <span class="chip">FPGA</span>
           <span class="chip">Python</span>
-          <span class="chip">3D-print</span>
+          <span class="chip">3D Printing</span>
         </div>
 
         <div class="cta">
-          <a class="btn primary" href="#projects">Se projekt</a>
-          <a class="btn" href="https://github.com/maxwellmollersten?tab=repositories" target="_blank" rel="noreferrer">Alla repos</a>
+          <a class="btn primary" href="#projects">View projects</a>
+          <a class="btn" href="https://github.com/maxwellmollersten?tab=repositories" target="_blank" rel="noreferrer">All repositories</a>
         </div>
 
-        <div class="search" aria-label="Sök">
-          <input id="q" type="search" placeholder="Sök projekt (t.ex. Arduino, motor, PCA9685, FPGA)..." />
+        <div class="search" aria-label="Search">
+          <input id="q" type="search" placeholder="Search projects (e.g., Arduino, motor, PCA9685, FPGA)..." />
         </div>
       </section>
 
@@ -265,25 +269,25 @@
           <div class="mini">
             <div class="stat">
               <b id="count">0</b>
-              <span>Projekt på sidan</span>
+              <span>Projects on this page</span>
             </div>
             <div class="stat">
               <b>GitHub Pages</b>
-              <span>Statisk sida</span>
+              <span>Static site</span>
             </div>
           </div>
           <p style="margin-top:12px" class="muted"></p>
         </div>
 
         <div class="card pad note" id="about">
-          <b style="color:var(--text)">Om sidan</b><br />
-          Mina projekt är listade nedan, klicka på repo för att komma till hemsidan för varje projekt.
+          <b style="color:var(--text)">About this page</b><br />
+          Projects are listed below—open the project page to see details, media, and links to the repo.
         </div>
       </aside>
     </div>
 
     <section class="section card pad" id="projects">
-      <h2>Projekt</h2>
+      <h2>Projects</h2>
       <p class="muted"></p>
 
       <div class="grid" id="grid"></div>
@@ -291,31 +295,31 @@
 
     <footer>
       <div>© <span id="year"></span> Maxwell</div>
-      <div>Byggd som <code>index.html</code> för GitHub Pages</div>
+      <div>Built as <code>index.html</code> for GitHub Pages</div>
     </footer>
   </main>
 
   <script>
     // ==========================
-    // 1) LÄGG IN ALLA DINA PROJEKT HÄR
+    // 1) ADD ALL YOUR PROJECTS HERE
     // ==========================
     const projects = [
       {
         title: "Flappy Diode",
-        desc: "Ett fysiskt elektronikspel inspirerat av Flappy Bird. Motorstyrning, sensorer och LED-drivning med poängräknare och game over.",
-        tags: ["Arduino", "DRV8833", "PCA9685", "LED", "Sensorer", "LED Display"],
+        desc: "A physical electronics game inspired by Flappy Bird. Motor control, sensors, and LED driving with scoring and game-over states.",
+        tags: ["Arduino", "DRV8833", "PCA9685", "LEDs", "Sensors", "LED Display"],
         repo: "https://maxwellmollersten.github.io/Flappy-Diode/",
-        demo: "" // valfritt
+        demo: "" // optional
       },
       {
         title: "EV Conversion",
-        desc: "Elbils-/EV-konverteringsprojekt med fokus på elmotor, sensorer, mekanisk integration och styrning.",
-        tags: ["EV", "Elmotor", "Sensorer", "Mekanik", "Elektronik"],
+        desc: "EV conversion project focused on the electric motor subsystem, sensors, mechanical integration, and control/verification.",
+        tags: ["EV", "Electric Motor", "Sensors", "Mechanical", "Electronics"],
         repo: "https://maxwellmollersten.github.io/EV-conversion/",
-        demo: "" // valfritt
+        demo: "" // optional
       }
 
-      // Lägg fler projekt här genom att kopiera ett objekt ovan
+      // Add more projects here by copying an object above
     ];
 
     // ==========================
@@ -340,7 +344,7 @@
           <p class="muted">${esc(p.desc)}</p>
           <div class="meta">${tags}</div>
           <div class="links">
-            <a class="link" href="${esc(p.repo)}" target="_blank" rel="noreferrer">Repo</a>
+            <a class="link" href="${esc(p.repo)}" target="_blank" rel="noreferrer">Project page</a>
             ${demo}
           </div>
         </article>
