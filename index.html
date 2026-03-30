@@ -67,13 +67,15 @@
       padding:8px 10px;
       border-radius:999px;
       border:1px solid transparent;
+      transition: color .15s, border-color .15s, background .15s;
     }
     .pill:hover{color:var(--text); border-color:var(--line); background:rgba(255,255,255,.04)}
+    .pill.active{color:var(--a); border-color:rgba(122,162,255,.30); background:rgba(122,162,255,.08)}
     .hero{
       margin-top:18px;
       display:grid;
       grid-template-columns: 1.3fr .7fr;
-      gap:14px;
+      gap:16px;
       align-items:stretch;
     }
     @media (max-width: 900px){ .hero{grid-template-columns:1fr} }
@@ -84,22 +86,30 @@
       box-shadow: var(--shadow);
       overflow:hidden;
     }
-    .pad{padding:22px}
-    h1{margin:0 0 10px; font-size: clamp(28px, 3.8vw, 44px); line-height:1.12}
+    .pad{padding:28px}
+    h1{
+      margin:0 0 12px;
+      font-size: clamp(28px, 3.8vw, 44px);
+      line-height:1.12;
+      background: linear-gradient(135deg, var(--text) 40%, var(--a));
+      -webkit-background-clip:text;
+      -webkit-text-fill-color:transparent;
+      background-clip:text;
+    }
     p{margin:0 0 12px; color:var(--muted); line-height:1.65}
     .sub{
-      display:flex; gap:10px; flex-wrap:wrap;
-      margin-top:14px;
+      display:flex; gap:8px; flex-wrap:wrap;
+      margin-top:16px;
     }
     .chip{
       font-size:12px;
-      padding:7px 10px;
+      padding:6px 10px;
       border-radius:999px;
-      border:1px solid var(--line);
-      background: rgba(255,255,255,.04);
-      color: rgba(234,240,255,.92);
+      border:1px solid rgba(122,162,255,.25);
+      background: rgba(122,162,255,.07);
+      color:var(--a);
     }
-    .cta{display:flex; gap:10px; flex-wrap:wrap; margin-top:14px}
+    .cta{display:flex; gap:8px; flex-wrap:wrap; margin-top:16px}
     .btn{
       display:inline-flex; align-items:center; justify-content:center;
       gap:8px;
@@ -117,11 +127,11 @@
     .btn:hover{transform: translateY(-1px)}
     .btn:active{transform: translateY(0)}
     .side{
-      display:flex; flex-direction:column; gap:12px;
+      display:flex; flex-direction:column; gap:16px;
     }
     .search{
-      display:flex; gap:10px; align-items:center; flex-wrap:wrap;
-      margin-top:12px;
+      display:flex; gap:8px; align-items:center; flex-wrap:wrap;
+      margin-top:16px;
     }
     input[type="search"]{
       width:100%;
@@ -145,12 +155,12 @@
     .stat b{display:block; font-size:18px}
     .stat span{color:var(--muted); font-size:12px}
 
-    .section{margin-top:14px}
-    .section h2{margin:0 0 10px; font-size:22px}
+    .section{margin-top:16px}
+    .section h2{margin:0 0 12px; font-size:22px; color:var(--a)}
     .grid{
       display:grid;
       grid-template-columns: repeat(3, 1fr);
-      gap:12px;
+      gap:16px;
     }
     @media (max-width: 980px){ .grid{grid-template-columns:1fr 1fr} }
     @media (max-width: 680px){ .grid{grid-template-columns:1fr} }
@@ -175,9 +185,9 @@
       font-size:11px;
       padding:6px 9px;
       border-radius:999px;
-      border:1px solid var(--line);
-      background: rgba(255,255,255,.03);
-      color: rgba(234,240,255,.90);
+      border:1px solid rgba(122,162,255,.25);
+      background: rgba(122,162,255,.07);
+      color:var(--a);
     }
     .links{display:flex; gap:10px; flex-wrap:wrap}
     .link{
@@ -373,6 +383,20 @@
     document.getElementById("year").textContent = new Date().getFullYear();
 
     render();
+
+    // Active nav highlight
+    const navLinks = document.querySelectorAll('nav .pill');
+    const sections = document.querySelectorAll('section[id]');
+    const navObserver = new IntersectionObserver((entries) => {
+      entries.forEach(entry => {
+        if(entry.isIntersecting){
+          navLinks.forEach(l => l.classList.remove('active'));
+          const link = document.querySelector(`nav a[href="#${entry.target.id}"]`);
+          if(link) link.classList.add('active');
+        }
+      });
+    }, { rootMargin: '-10% 0px -60% 0px' });
+    sections.forEach(s => navObserver.observe(s));
   </script>
 </body>
 </html>
